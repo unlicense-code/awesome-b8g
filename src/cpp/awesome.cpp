@@ -396,7 +396,7 @@ int NAMESPACE::CreateIsolate(int argc, char** argv,
 
 int NAMESPACE::CreateIsolate(int argc, char** argv, const char* main_src, 
   unsigned int main_len, uint64_t start) {
-  return CreateIsolate(argc, argv, main_src, main_len, NULL, 0, NULL, 0, start, "smol", "main.js");
+  return CreateIsolate(argc, argv, main_src, main_len, NULL, 0, NULL, 0, start, "awesome", "main.js");
 }
 
 void NAMESPACE::Print(const FunctionCallbackInfo<Value> &args) {
@@ -599,7 +599,7 @@ void NAMESPACE::NextTick(const FunctionCallbackInfo<Value>& args) {
 
 void NAMESPACE::Init(Isolate* isolate, Local<ObjectTemplate> target) {
   Local<ObjectTemplate> version = ObjectTemplate::New(isolate);
-  SET_VALUE(isolate, version, "smol", String::NewFromUtf8Literal(isolate, 
+  SET_VALUE(isolate, version, "awesome", String::NewFromUtf8Literal(isolate, 
     VERSION));
   SET_VALUE(isolate, version, "v8", String::NewFromUtf8(isolate, 
     v8::V8::GetVersion()).ToLocalChecked());

@@ -1,4 +1,4 @@
-# storage
+# awesome
 A Basic Unlicensed InMemory Storage Implementation can be used as Code Runtime or Scriptable Multi Paradigm Database.
 
 ## Features

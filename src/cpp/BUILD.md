@@ -1,7 +1,7 @@
 Makefile
 ```
 CC=g++
-RELEASE=0.1.12
+RELEASE=current
 INSTALL=/usr/local/bin
 TARGET=awesome
 LIB=-ldl
@@ -14,7 +14,7 @@ help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_\.-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 deps/v8/libv8_monolith.a: ## download v8 monolithic library for linking
-	curl -L -o v8lib-$(RELEASE).tar.gz https://raw.githubusercontent.com/just-js/libv8/$(RELEASE)/v8.tar.gz
+	curl -L -o v8lib-$(RELEASE).tar.gz https://releases.dspeed.eu/v8/x64/linux//{RELEASE}.tar.gz
 	tar -zxvf v8lib-$(RELEASE).tar.gz
 	rm -f v8lib-$(RELEASE).tar.gz
 

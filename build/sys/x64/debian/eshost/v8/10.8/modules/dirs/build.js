@@ -8,7 +8,7 @@ export const meta = {
 // The Prefered way to access content is to simply iterate over it while meta should supply lazyHelpers
 // Should also use modules MODULE::READFILE prefixed keys indicate a Useable Module 
 // content["debian-x64"].v8.Dockerfile
-export const content = [{ "debian-x64": { "v8": {
+export const content = [{ "x64": { "debian": { "v8": {
     // Highly Annotated Docker File that includes a lot of posix magic by intent to teach you 
     // Importent concepts for porting software that needs a specific OS to build properly.
     // This should later better get a referenced Object like BUILD/DOCKER::SYS::x64::DEBIAN::10.8.xxx::SHA256.js To Reflect better what that builds
@@ -79,4 +79,4 @@ RUN /depot_tools/ninja v8_monolith -C out.gn/x64.release/ -j $(getconf _NPROCESS
 # above created tar includes 2 seperated tar files for the images one for sysroot one for build result.
 # 8f5848ef193c85cc74abe276b8be2d88a94eb88523a69b30ddbe681f32ff98a6 SHA_SUM_CREATION`,
   }
-} }];
+} } }];

@@ -1,11 +1,17 @@
 # awesome
 A Basic Unlicensed InMemory Storage Implementation can be used as Code Runtime or Scriptable Multi Paradigm Database.
+The Main Development happens for historical reasons in https://github.com/lemanschik/src_chromium and https://github.com/lemanschik/src_v8
+
+This implements a run able component based on the src_v8/components/just example runtime offering a middle sized hostd implementation hostd does
+not refer to HostD or something like that also not to the ESX hostd It refers to HoSTD Hardware Operation Standard used to implement our core lang.
+That gets then translated to Objects which are highly Scriptable as also Distribute able nice snapshot format or other representations.
+In This case used to Implement the Interfaces needed to operate on that objects with diffrent interop methods like network clients or posix shells or
+filesystems.
 
 ## Features
 - Offers Scriptable CPP/ECMAScript JIT/AOT Cluster in Memory Data Grid / Object Storage. 
 - Can be used with WSL to create Memory Drives in userland for Windows without additional Software. 
 - can compile it self!
-
 
 ## Usecases
 - Scaleable InMemory Grid.

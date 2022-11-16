@@ -8,6 +8,9 @@ A Basic Unlicensed InMemory Storage Implementation can be used as Code Runtime o
 
 
 ## Usecases
+- Scaleable InMemory Grid.
+- Used as backend Host Implementation for unlicensed-code/editor.
+- Used as Swiss Army Knife but the Rambo Edition for unlicensed-code/editor.
 - filesystem
 - version control
 - p2p filesharing
@@ -19,10 +22,12 @@ A Basic Unlicensed InMemory Storage Implementation can be used as Code Runtime o
 - vfs ceph couchbase oracle db replacement
 
 ## How?
-The Core is a Application that is able to dynamical link and execute code as also pass arguments to functions and this way implements the concepts of capability based protocols. Is able to run on multiple instances and link them inMemory as also handle locking and message passing in a efficent way.
+The Core is a Application that is able to dynamical link and execute code as also pass arguments to functions and this way implements the concepts of capability based protocols. so a VM. It Is able to run on multiple instances and link them inMemory as also handle locking and message passing in a efficent way.
 Is based on most of the fundamentals of V8 as also GraalVM as also the Frida Project. Using the same Composition Pattern that JustJS uses for it's 
 builds. In fact justjs was a big Inspiration and showed that all this will work long before we identified that it will be the best when applyed correct.
 
 We learned from a lot of open source projects and abstracted the ovisios and keept the meaning full and that is Condenset into this Project.
 As Everything in IT is about Input / Processing / Output and this implements this core fundamentals in a flexible way. That is solid as it is compatible
 to any existing Software no matter how it is Implemented so this offers Integrations and Adapters to anything it is awsome!
+
+Overall this trys to algin and clean the dust in the compiler and build tools world.

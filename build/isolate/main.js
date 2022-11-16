@@ -1,6 +1,9 @@
 // Only patch this code if this runs in isolates
 if (global.isolates) {
-  const { error, print } = smol
+  // demo load fs module
+  isolates.load('./fs/fs.o')
+  // HR Features
+  const { error, print } = isolates
 
   global.onUnhandledRejection = err => {
     error(err.stack)

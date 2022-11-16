@@ -1,4 +1,4 @@
-void os::sys::WaitPID(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::WaitPID(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> ab = args[0].As<Int32Array>()->Buffer();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   int *fields = static_cast<int *>(backing->Data());
@@ -11,7 +11,7 @@ void os::sys::WaitPID(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(args[0]);
 }
 
-void os::sys::WaitTID(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::WaitTID(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> ab = args[0].As<Int32Array>()->Buffer();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   int *fields = static_cast<int *>(backing->Data());
@@ -24,7 +24,7 @@ void os::sys::WaitTID(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(args[0]);
 }
 
-void os::sys::Exec(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Exec(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
   String::Utf8Value filePath(isolate, args[0]);
   Local<Array> arguments = args[1].As<Array>();
@@ -45,14 +45,14 @@ void os::sys::Exec(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(Integer::New(isolate, execvp(*filePath, argv)));
 }
 
-void os::sys::Setenv(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Setenv(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   String::Utf8Value name(isolate, args[0]);
   String::Utf8Value value(isolate, args[1]);
   args.GetReturnValue().Set(Integer::New(isolate, setenv(*name, *value, 1)));
 }
 
-void os::sys::Getenv(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Getenv(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   String::Utf8Value name(isolate, args[0]);
   char* value = getenv(*name);
@@ -62,13 +62,13 @@ void os::sys::Getenv(const FunctionCallbackInfo<Value> &args) {
     strnlen(value, 1024)).ToLocalChecked());
 }
 
-void os::sys::Unsetenv(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Unsetenv(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   String::Utf8Value name(isolate, args[0]);
   args.GetReturnValue().Set(Integer::New(isolate, unsetenv(*name)));
 }
 
-void os::sys::Spawn(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Spawn(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   String::Utf8Value filePath(isolate, args[0]);
@@ -117,38 +117,38 @@ void os::sys::Spawn(const FunctionCallbackInfo<Value> &args) {
   free(argv);
 }
 
-void os::sys::RunMicroTasks(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::RunMicroTasks(const FunctionCallbackInfo<Value> &args) {
   args.GetIsolate()->PerformMicrotaskCheckpoint();
 }
 
-void os::sys::EnqueueMicrotask(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::EnqueueMicrotask(const FunctionCallbackInfo<Value>& args) {
   args.GetIsolate()->EnqueueMicrotask(args[0].As<Function>());
 }
 
-void os::sys::Exit(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Exit(const FunctionCallbackInfo<Value>& args) {
   exit(Local<Integer>::Cast(args[0])->Value());
 }
 
-void os::sys::Fork(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Fork(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), fork()));
 }
 
-void os::sys::Kill(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Kill(const FunctionCallbackInfo<Value>& args) {
   int pid = Local<Integer>::Cast(args[0])->Value();
   int signum = Local<Integer>::Cast(args[1])->Value();
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), kill(pid, signum)));
 }
 
-void os::sys::Getchar(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Getchar(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getchar()));
 }
 
-void os::sys::Putchar(const FunctionCallbackInfo<Value>& args) {
+void NAMESPACE::sys::Putchar(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     putchar(Local<Integer>::Cast(args[0])->Value())));
 }
 
-void os::sys::CPUUsage(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::CPUUsage(const FunctionCallbackInfo<Value> &args) {
   struct tms stat;
   clock_t c = times(&stat);
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), c));
@@ -163,7 +163,7 @@ void os::sys::CPUUsage(const FunctionCallbackInfo<Value> &args) {
   fields[3] = stat.tms_cstime;
 }
 
-void os::sys::GetrUsage(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetrUsage(const FunctionCallbackInfo<Value> &args) {
   struct rusage usage;
   int type = RUSAGE_SELF;
   if (args.Length() > 0) type = Local<Integer>::Cast(args[1])->Value();
@@ -172,9 +172,9 @@ void os::sys::GetrUsage(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> ab = array->Buffer();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   double *fields = static_cast<double *>(backing->Data());
-  fields[0] = (OS_MICROS_PER_SEC * usage.ru_utime.tv_sec) 
+  fields[0] = (MICROS_PER_SEC * usage.ru_utime.tv_sec) 
     + usage.ru_utime.tv_usec;
-  fields[1] = (OS_MICROS_PER_SEC * usage.ru_stime.tv_sec) 
+  fields[1] = (MICROS_PER_SEC * usage.ru_stime.tv_sec) 
     + usage.ru_stime.tv_usec;
   fields[2] = usage.ru_maxrss;
   fields[3] = usage.ru_ixrss;
@@ -192,81 +192,81 @@ void os::sys::GetrUsage(const FunctionCallbackInfo<Value> &args) {
   fields[15] = usage.ru_nivcsw;
 }
 
-void os::sys::PID(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::PID(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getpid()));
 }
 
-void os::sys::TID(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::TID(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     syscall(SYS_gettid)));
 }
 
-void os::sys::GetPgrp(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetPgrp(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getpgrp()));
 }
 
-void os::sys::SetPgid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SetPgid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     setpgid(Local<Integer>::Cast(args[0])->Value(), 
     Local<Integer>::Cast(args[1])->Value())));
 }
 
-void os::sys::PPID(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::PPID(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getppid()));
 }
 
-void os::sys::GetSid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetSid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     getsid(Local<Integer>::Cast(args[0])->Value())));
 }
 
-void os::sys::SetSid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SetSid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), setsid()));
 }
 
-void os::sys::GetUid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetUid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getuid()));
 }
 
-void os::sys::SetUid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SetUid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     setuid(Local<Integer>::Cast(args[0])->Value())));
 }
 
-void os::sys::GetGid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetGid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), getgid()));
 }
 
-void os::sys::SetGid(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SetGid(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     setgid(Local<Integer>::Cast(args[0])->Value())));
 }
 
-void os::sys::Errno(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Errno(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), errno));
 }
 
-void os::sys::StrError(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::StrError(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(String::NewFromUtf8(args.GetIsolate(), 
     strerror(Local<Integer>::Cast(args[0])->Value())).ToLocalChecked());
 }
 
-void os::sys::Sleep(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Sleep(const FunctionCallbackInfo<Value> &args) {
   sleep(Local<Integer>::Cast(args[0])->Value());
 }
 
-void os::sys::USleep(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::USleep(const FunctionCallbackInfo<Value> &args) {
   usleep(Local<Integer>::Cast(args[0])->Value());
 }
 
-void os::sys::NanoSleep(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::NanoSleep(const FunctionCallbackInfo<Value> &args) {
   struct timespec sleepfor;
   sleepfor.tv_sec = Local<Integer>::Cast(args[0])->Value();
   sleepfor.tv_nsec = Local<Integer>::Cast(args[1])->Value();
-  nanosleep(&sleepfor, NULL);
+  nanNAMESPACEleep(&sleepfor, NULL);
 }
 
-void os::sys::SharedMemoryUsage(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SharedMemoryUsage(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   v8::SharedMemoryStatistics sm_stats;
@@ -285,7 +285,7 @@ void os::sys::SharedMemoryUsage(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(o);
 }
 
-void os::sys::HeapObjectStatistics(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::HeapObjectStatistics(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   v8::HeapObjectStatistics obj_stats;
   size_t num_types = isolate->NumberOfTrackedHeapObjectTypes();
@@ -315,7 +315,7 @@ void os::sys::HeapObjectStatistics(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(res);
 }
 
-void os::sys::HeapCodeStatistics(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::HeapCodeStatistics(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   v8::HeapCodeStatistics code_stats;
@@ -333,7 +333,7 @@ void os::sys::HeapCodeStatistics(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(o);
 }
 
-void os::sys::HeapSpaceUsage(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::HeapSpaceUsage(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   HeapSpaceStatistics s;
@@ -401,7 +401,7 @@ void os::sys::HeapSpaceUsage(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(o);
 }
 
-void os::sys::Memcpy(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Memcpy(const FunctionCallbackInfo<Value> &args) {
   std::shared_ptr<BackingStore> bdest;
   std::shared_ptr<BackingStore> bsource;
   if (args[0]->IsArrayBuffer()) {
@@ -431,14 +431,14 @@ void os::sys::Memcpy(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), len));
 }
 
-void os::sys::Utf8Length(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Utf8Length(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   args.GetReturnValue().Set(Integer::New(isolate, 
     args[0].As<String>()->Utf8Length(isolate)));
 }
 
 // todo: aligned_alloc
-void os::sys::Calloc(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Calloc(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   size_t count = Local<Integer>::Cast(args[0])->Value();
   size_t size = 0;
@@ -469,20 +469,20 @@ void os::sys::Calloc(const FunctionCallbackInfo<Value> &args) {
   std::unique_ptr<BackingStore> backing;
   if (shared) {
     backing = SharedArrayBuffer::NewBackingStore(chunk, count * size, 
-          os::FreeMemory, nullptr);
+          NAMESPACE::FreeMemory, nullptr);
     Local<SharedArrayBuffer> ab =
         SharedArrayBuffer::New(isolate, std::move(backing));
     args.GetReturnValue().Set(ab);
   } else {
     backing = ArrayBuffer::NewBackingStore(chunk, count * size, 
-        os::FreeMemory, nullptr);
+        NAMESPACE::FreeMemory, nullptr);
     Local<ArrayBuffer> ab =
         ArrayBuffer::New(isolate, std::move(backing));
     args.GetReturnValue().Set(ab);
   }
 }
 
-void os::sys::ReadString(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::ReadString(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> ab = args[0].As<ArrayBuffer>();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   char *data = static_cast<char *>(backing->Data());
@@ -500,21 +500,21 @@ void os::sys::ReadString(const FunctionCallbackInfo<Value> &args) {
     NewStringType::kNormal, len).ToLocalChecked());
 }
 
-void os::sys::GetAddress(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetAddress(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> ab = args[0].As<ArrayBuffer>();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   char *data = static_cast<char *>(backing->Data());
   args.GetReturnValue().Set(BigInt::New(args.GetIsolate(), (uint64_t)data));
 }
 
-void os::sys::GetAddressShared(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::GetAddressShared(const FunctionCallbackInfo<Value> &args) {
   Local<SharedArrayBuffer> ab = args[0].As<SharedArrayBuffer>();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
   char *data = static_cast<char *>(backing->Data());
   args.GetReturnValue().Set(BigInt::New(args.GetIsolate(), (uint64_t)data));
 }
 
-void os::sys::WriteString(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::WriteString(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<ArrayBuffer> ab = args[0].As<ArrayBuffer>();
   Local<String> str = args[1].As<String>();
@@ -530,7 +530,7 @@ void os::sys::WriteString(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(isolate, written));
 }
 
-void os::sys::WriteCString(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::WriteCString(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<ArrayBuffer> ab = args[0].As<ArrayBuffer>();
   std::shared_ptr<BackingStore> backing = ab->GetBackingStore();
@@ -543,7 +543,7 @@ void os::sys::WriteCString(const FunctionCallbackInfo<Value> &args) {
     (uint8_t*)data, off, len, v8::String::HINT_MANY_WRITES_EXPECTED)));
 }
 
-void os::sys::Fcntl(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Fcntl(const FunctionCallbackInfo<Value> &args) {
   int fd = Local<Integer>::Cast(args[0])->Value();
   int flags = Local<Integer>::Cast(args[1])->Value();
   if (args.Length() > 2) {
@@ -555,13 +555,13 @@ void os::sys::Fcntl(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), fcntl(fd, flags)));
 }
 
-void os::sys::Cwd(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Cwd(const FunctionCallbackInfo<Value> &args) {
   char cwd[PATH_MAX];
   args.GetReturnValue().Set(String::NewFromUtf8(args.GetIsolate(), 
     getcwd(cwd, PATH_MAX), NewStringType::kNormal).ToLocalChecked());
 }
 
-void os::sys::Env(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Env(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   int size = 0;
@@ -575,7 +575,7 @@ void os::sys::Env(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(envarr);
 }
 
-void os::sys::Timer(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Timer(const FunctionCallbackInfo<Value> &args) {
   int t1 = Local<Integer>::Cast(args[0])->Value();
   int t2 = Local<Integer>::Cast(args[1])->Value();
   int argc = args.Length();
@@ -603,12 +603,12 @@ void os::sys::Timer(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), fd));
 }
 
-void os::sys::AvailablePages(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::AvailablePages(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     sysconf(_SC_AVPHYS_PAGES)));
 }
 
-void os::sys::WritePointer(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::WritePointer(const FunctionCallbackInfo<Value> &args) {
   Local<ArrayBuffer> abdest = args[0].As<ArrayBuffer>();
   uint8_t* dest = static_cast<uint8_t*>(abdest->GetBackingStore()->Data());
   Local<ArrayBuffer> absrc = args[1].As<ArrayBuffer>();
@@ -618,7 +618,7 @@ void os::sys::WritePointer(const FunctionCallbackInfo<Value> &args) {
   *reinterpret_cast<void **>(ptr) = src;
 }
 
-void os::sys::ReadMemory(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::ReadMemory(const FunctionCallbackInfo<Value> &args) {
   Local<BigInt> start64 = Local<BigInt>::Cast(args[0]);
   Local<BigInt> end64 = Local<BigInt>::Cast(args[1]);
   const uint64_t size = end64->Uint64Value() - start64->Uint64Value();
@@ -628,7 +628,7 @@ void os::sys::ReadMemory(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(ArrayBuffer::New(args.GetIsolate(), std::move(backing)));
 }
 
-void os::sys::ShmOpen(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::ShmOpen(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   String::Utf8Value name(isolate, args[0]);
   int argc = args.Length();
@@ -640,13 +640,13 @@ void os::sys::ShmOpen(const FunctionCallbackInfo<Value> &args) {
     shm_open(*name, flags, mode)));
 }
 
-void os::sys::ShmUnlink(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::ShmUnlink(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   String::Utf8Value name(isolate, args[0]);
   args.GetReturnValue().Set(Integer::New(isolate, shm_unlink(*name)));
 }
 
-void os::sys::MMap(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::MMap(const FunctionCallbackInfo<Value> &args) {
   // TODO: if private, then don't use sharedarraybuffer
   int fd = Local<Integer>::Cast(args[0])->Value();
   int len = Local<Integer>::Cast(args[1])->Value();
@@ -675,7 +675,7 @@ void os::sys::MMap(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(ab);
 }
 
-void os::sys::MRemap(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::MRemap(const FunctionCallbackInfo<Value> &args) {
   Local<SharedArrayBuffer> ab = args[0].As<SharedArrayBuffer>();
   size_t oldsize = Local<Integer>::Cast(args[1])->Value();
   size_t newsize = Local<Integer>::Cast(args[2])->Value();
@@ -691,7 +691,7 @@ void os::sys::MRemap(const FunctionCallbackInfo<Value> &args) {
     std::move(backing)));
 }
 
-void os::sys::MSync(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::MSync(const FunctionCallbackInfo<Value> &args) {
   Local<SharedArrayBuffer> ab = args[0].As<SharedArrayBuffer>();
   int flags = MS_SYNC;
   if (args.Length() > 2) {
@@ -703,14 +703,14 @@ void os::sys::MSync(const FunctionCallbackInfo<Value> &args) {
     flags)));
 }
 
-void os::sys::MUnmap(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::MUnmap(const FunctionCallbackInfo<Value> &args) {
   Local<SharedArrayBuffer> ab = args[0].As<SharedArrayBuffer>();
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     munmap(ab->GetBackingStore()->Data(), 
     Local<Integer>::Cast(args[1])->Value())));
 }
 
-void os::sys::Ioctl(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Ioctl(const FunctionCallbackInfo<Value> &args) {
   int fd = Local<Integer>::Cast(args[0])->Value();
   int flags = Local<Integer>::Cast(args[1])->Value();
   if (args.Length() > 2) {
@@ -729,14 +729,14 @@ void os::sys::Ioctl(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), ioctl(fd, flags)));
 }
 
-void os::sys::Reboot(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::Reboot(const FunctionCallbackInfo<Value> &args) {
   int flags = RB_POWER_OFF;
   if (args.Length() > 0) flags = Local<Integer>::Cast(args[0])->Value();
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), reboot(flags)));
 }
 
 #ifndef STATIC
-void os::sys::DLOpen(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::DLOpen(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   int mode = RTLD_LAZY;
   void* handle;
@@ -755,7 +755,7 @@ void os::sys::DLOpen(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(BigInt::New(isolate, (uint64_t)handle));
 }
 
-void os::sys::DLSym(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::DLSym(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<BigInt> address64 = Local<BigInt>::Cast(args[0]);
   String::Utf8Value name(isolate, args[1]);
@@ -768,7 +768,7 @@ void os::sys::DLSym(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(BigInt::New(isolate, (uint64_t)ptr));
 }
 
-void os::sys::DLError(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::DLError(const FunctionCallbackInfo<Value> &args) {
   char* err = dlerror();
   if (err == NULL) {
     args.GetReturnValue().Set(v8::Null(args.GetIsolate()));
@@ -778,14 +778,14 @@ void os::sys::DLError(const FunctionCallbackInfo<Value> &args) {
     NewStringType::kNormal).ToLocalChecked());
 }
 
-void os::sys::DLClose(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::DLClNAMESPACEe(const FunctionCallbackInfo<Value> &args) {
   Local<BigInt> address64 = Local<BigInt>::Cast(args[0]);
   void* handle = reinterpret_cast<void*>(address64->Uint64Value());
-  args.GetReturnValue().Set(Integer::New(args.GetIsolate(), dlclose(handle)));
+  args.GetReturnValue().Set(Integer::New(args.GetIsolate(), dlclNAMESPACEe(handle)));
 }
 #endif
 
-void os::sys::FExecVE(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::FExecVE(const FunctionCallbackInfo<Value> &args) {
   Isolate* isolate = args.GetIsolate();
   int fd = Local<Integer>::Cast(args[0])->Value();
   Local<Array> arguments = args[1].As<Array>();
@@ -816,37 +816,37 @@ void os::sys::FExecVE(const FunctionCallbackInfo<Value> &args) {
     fexecve(fd, argv, envv)));
 }
 
-void os::sys::SetTerminalFlags(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::SetTerminalFlags(const FunctionCallbackInfo<Value> &args) {
   int fd = Local<Integer>::Cast(args[0])->Value();
   int flags = Local<Integer>::Cast(args[1])->Value();
   int action = TCSAFLUSH;
   if (args.Length() > 2) action = Local<Integer>::Cast(args[2])->Value();
-  struct termios orig_termios;
-  tcgetattr(fd, &orig_termios);
-  struct termios raw = orig_termios;
+  struct termiNAMESPACE orig_termiNAMESPACE;
+  tcgetattr(fd, &orig_termiNAMESPACE);
+  struct termiNAMESPACE raw = orig_termiNAMESPACE;
   raw.c_lflag = flags;
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), 
     tcsetattr(fd, action, &raw)));
 }
 
-void os::sys::GetTerminalFlags(const FunctionCallbackInfo<Value> &args) {
-  struct termios orig;
+void NAMESPACE::sys::GetTerminalFlags(const FunctionCallbackInfo<Value> &args) {
+  struct termiNAMESPACE orig;
   tcgetattr(Local<Integer>::Cast(args[0])->Value(), &orig);
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), orig.c_lflag));
 }
 
-void os::sys::IsaTTY(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::IsaTTY(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(Integer::New(args.GetIsolate(), isatty(Local<Integer>::Cast(args[0])->Value())));
 }
 
-void os::sys::MemFdCreate(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::MemFdCreate(const FunctionCallbackInfo<Value> &args) {
   Isolate* isolate = args.GetIsolate();
   v8::String::Utf8Value fname(isolate, args[0]);
   args.GetReturnValue().Set(Integer::New(isolate, memfd_create(*fname, 
     Local<Integer>::Cast(args[1])->Value())));
 }
 
-void os::sys::BufferInfo(const FunctionCallbackInfo<Value> &args) {
+void NAMESPACE::sys::BufferInfo(const FunctionCallbackInfo<Value> &args) {
   Isolate *isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   Local<Object> meta = args[1].As<Object>();
@@ -874,7 +874,7 @@ void os::sys::BufferInfo(const FunctionCallbackInfo<Value> &args) {
   args.GetReturnValue().Set(meta);
 }
 
-void os::sys::Init(Isolate* isolate, Local<ObjectTemplate> target) {
+void NAMESPACE::sys::Init(Isolate* isolate, Local<ObjectTemplate> target) {
   Local<ObjectTemplate> sys = ObjectTemplate::New(isolate);
   SET_METHOD(isolate, sys, "getuid", GetUid);
   SET_METHOD(isolate, sys, "setuid", SetUid);
@@ -931,7 +931,7 @@ void os::sys::Init(Isolate* isolate, Local<ObjectTemplate> target) {
   SET_METHOD(isolate, sys, "kill", Kill);
   SET_METHOD(isolate, sys, "usleep", USleep);
   SET_METHOD(isolate, sys, "pages", AvailablePages);
-  SET_METHOD(isolate, sys, "nanosleep", NanoSleep);
+  SET_METHOD(isolate, sys, "nanNAMESPACEleep", NanoSleep);
   SET_METHOD(isolate, sys, "mmap", MMap);
   SET_METHOD(isolate, sys, "munmap", MUnmap);
   SET_METHOD(isolate, sys, "mremap", MRemap);
@@ -945,7 +945,7 @@ void os::sys::Init(Isolate* isolate, Local<ObjectTemplate> target) {
   SET_METHOD(isolate, sys, "dlopen", DLOpen);
   SET_METHOD(isolate, sys, "dlsym", DLSym);
   SET_METHOD(isolate, sys, "dlerror", DLError);
-  SET_METHOD(isolate, sys, "dlclose", DLClose);
+  SET_METHOD(isolate, sys, "dlclNAMESPACEe", DLClNAMESPACEe);
   SET_VALUE(isolate, sys, "RTLD_LAZY", Integer::New(isolate, RTLD_LAZY));
   SET_VALUE(isolate, sys, "RTLD_NOW", Integer::New(isolate, RTLD_NOW));
 #endif

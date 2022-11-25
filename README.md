@@ -1,4 +1,10 @@
-# awesome
+# (WiP) awesome
+
+## Importent note
+This does not build out of the box at present unless you know what your doing. This is Work In Progress designed to get Installed
+via a GUI Interface that creates the correct rootfs to build the Platform and or additional Boot Implementations. 
+
+## Start README
 A Basic Unlicensed InMemory Storage Implementation can be used as Code Runtime or Scriptable Multi Paradigm Database.
 The Main Development happens for historical reasons in https://github.com/lemanschik/src_chromium and https://github.com/lemanschik/src_v8
 

@@ -43,3 +43,8 @@ As Everything in IT is about Input / Processing / Output and this implements thi
 to any existing Software no matter how it is Implemented so this offers Integrations and Adapters to anything it is awsome!
 
 Overall this trys to algin and clean the dust in the compiler and build tools world.
+
+
+## Project Structure
+Larger amount of .js files do contain so called dirEntrys that are in general 2 propertys one for the real content of a directory like structure and a object with the same propertys directly accessable via directoryHandle Api's this unifies the reuse of that files without getting reparsed
+also it offers a relativ readable Structure for Humans as it is largely JSON Compatible when you spot arrays full of numbers you found the binary Representation of something as so called UInt8Array a Array Storing Integer Values that can get translated to Character and Binary data. If you want to store large amount of binary char data then you should consider creating a extra file and reference that via a fetch function and parsing instructions.
